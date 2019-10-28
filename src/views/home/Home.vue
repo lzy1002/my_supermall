@@ -46,7 +46,9 @@
         bannerImgIsOk: false,
         featureImgIsOk: false,
         tabControlTop: null,
-        leaveY: 0
+        leaveY: 0,
+        ref: null,
+        loadFn: null
       }
     },
     components: {
@@ -72,18 +74,25 @@
       this.getGoodsData("sell");
     },
     mounted(){
-      let res = deBounce(this.$refs.scroll.refresh, 300);
+      this.ref = deBounce(this.$refs.scroll.refresh, 300);
+      this.loadFn = () => {
+        this.ref();
+      }
 
-      this.$bus.$on("imageLoad", () => {
-        res();
-      })
+      // this.$bus.$on("imageLoad", () => {
+      //   this.ref();
+      // });
     },
     activated(){
+
+      this.$bus.$on("imageLoad", this.loadFn);
+
       this.$refs.scroll.refresh();
       this.$refs.scroll.scrollTo(0, this.leaveY, 0);
     },
     deactivated(){
       this.leaveY = this.position.y;
+      this.$bus.$off("imageLoad", this.loadFn);
     },
     methods: {
       getGoodsData(type){

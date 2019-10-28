@@ -27,6 +27,7 @@
       },
       itemClick(index){
         this.itemIndex = index;
+        this.$emit("itemClick", index);
       }
     }
   }
@@ -34,7 +35,7 @@
 
 <style scoped>
   .nav-bar {
-
+    background-color: #fff;
   }
   .back img{
     margin-top: 11px;
